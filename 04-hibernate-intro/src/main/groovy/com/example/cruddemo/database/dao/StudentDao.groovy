@@ -1,0 +1,30 @@
+package com.example.cruddemo.database.dao
+
+import com.example.cruddemo.database.model.Student
+import groovy.transform.CompileStatic
+import jakarta.persistence.EntityManager
+import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Repository
+
+@Repository
+@CompileStatic
+class StudentDao implements IStudentDao {
+    private EntityManager entityManager
+
+    @Autowired
+    StudentDao(EntityManager entityManager) {
+        this.entityManager = entityManager
+    }
+
+    @Override
+    @Transactional
+    void save(Student student) {
+        entityManager.persist(student)
+    }
+
+    @Override
+    Student find(long id) {
+        entityManager.find(Student.class, id)
+    }
+}
