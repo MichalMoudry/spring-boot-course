@@ -7,4 +7,8 @@ import groovy.transform.CompileStatic
 interface IStudentDao {
     void save(Student student)
     Student find(long id)
+    List<Student> findAllEntities()
+    List<Student> findByLastName(String lastName)
+    void update(Student student)
+    void delete(long id)
 }
