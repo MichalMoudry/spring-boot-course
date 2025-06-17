@@ -34,6 +34,9 @@ class EmployeeDao implements IEmployeeDao {
     @Override
     void deleteById(UUID id) {
         Employee employee = getOne(id)
+        if (employee == null) {
+            return
+        }
         em.remove(employee)
     }
 }
