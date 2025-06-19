@@ -15,8 +15,9 @@ class EmployeeService implements IEmployeeService {
     private IEmployeeDao dao
     private IEmployeeRepository repository
 
-    EmployeeService(IEmployeeDao employeeDao) {
+    EmployeeService(IEmployeeDao employeeDao, IEmployeeRepository repository) {
         this.dao = employeeDao
+        this.repository = repository
     }
 
     @Override
