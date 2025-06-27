@@ -6,10 +6,33 @@
 </head>
 <body>
     <form th:action="@{/processStudentForm}" th:object="${student}" method="post">
-        <label for="firstName">First name:</label>
-        <input type="text" id="firstName" name="firstName" th:field="*{firstName}" />
-        <label for="lastName">Last name:</label>
-        <input type="text" id="lastName" name="lastName" th:field="*{lastName}" />
+        <p>
+            <label for="firstName">First name:</label>
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}" />
+        </p>
+        <p>
+            <label for="lastName">Last name:</label>
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}" />
+        </p>
+        <p>
+            <label for="country">Country:</label>
+            <select th:field="*{country}" id="country" name="country">
+                <option th:value="Brazil">Brazil</option>
+                <option th:value="France">France</option>
+                <option th:value="Germany">Germany</option>
+            </select>
+        </p>
+        <p>
+            <label>Favourite programming language:</label>
+            <input type="radio" th:field="*{favouriteLanguage}" th:value="Csharp">C#</input>
+            <input type="radio" th:field="*{favouriteLanguage}" th:value="Python">Python</input>
+            <input type="radio" th:field="*{favouriteLanguage}" th:value="Groovy">Groovy</input>
+        </p>
+        <p>
+            <label>Favourite OS:</label>
+            <input type="checkbox" th:field="*{favouriteOSes}" th:value="Windows">MS Windows</input>
+            <input type="checkbox" th:field="*{favouriteOSes}" th:value="MacOS">macOS</input>
+        </p>
         <input type="submit" value="Submit" />
     </form>
 </body>
