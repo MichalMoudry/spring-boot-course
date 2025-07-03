@@ -20,6 +20,11 @@
             <span th:if="${#fields.hasErrors('lastName')}"
                   th:errors="*{lastName}" class="error"></span>
 
+            <label>Post code:</label>
+            <input type="text" id="postCode" name="lastName" th:field="*{postCode}" />
+            <span th:if="${#fields.hasErrors('postCode')}"
+                  th:errors="*{postCode}" class="error"></span>
+
             <button type="submit">Submit</button>
         </form>
     </div>
