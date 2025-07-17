@@ -11,13 +11,13 @@ import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = 'instructor_detail', schema = 'hb_01_one_to_one_uni')
+@Table(name = 'instructor_detail', schema = 'hb_03_one_to_many')
 @CompileStatic
 class InstructorDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = 'id')
-    private int id
+    private long id
 
     @Column(name = 'youtube_channel')
     private String youtubeChannel

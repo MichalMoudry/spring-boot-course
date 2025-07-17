@@ -1,6 +1,7 @@
 package com.example.demo
 
 import com.example.demo.dao.IAppDao
+import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
 import groovy.transform.CompileStatic
@@ -21,7 +22,14 @@ class DemoApplication {
 	CommandLineRunner commandLineRunner(IAppDao appDao) {
 		return { runner -> {
 			println('Hello world!')
-			// findInstructorDetail(appDao)
+			// createInstructorWithCourses(appDao)
+			// findInstructorWithCourses(appDao)
+
+			/*findInstructorWithJoinFetch(appDao)
+			updateInstructor(appDao)
+			findInstructorWithJoinFetch(appDao)*/
+
+			// updateCourse(appDao)
 		} }
 	}
 
@@ -55,5 +63,83 @@ class DemoApplication {
 	static void findInstructorDetail(IAppDao dao) {
 		InstructorDetail detail = dao.findDetailById(1)
 		println(detail)
+	}
+
+	static void createInstructorWithCourses(IAppDao appDao) {
+		Instructor tempInstructor = new Instructor(
+				'Susan',
+				'Darby',
+				'chad@darby.com'
+		)
+		InstructorDetail detail = new InstructorDetail(
+				'https://test.com',
+				'Sport'
+		)
+		tempInstructor.setDetail(detail)
+
+		Course[] courses = [
+		        new Course('Air Guitar'),
+				new Course('Pinball')
+		]
+		for (Course course in courses) {
+			println("Will save $course course")
+			tempInstructor.add(course)
+		}
+
+		println("Saving the instructor: $tempInstructor")
+		appDao.save(tempInstructor)
+	}
+
+	static void findInstructorWithCourses(IAppDao appDao) {
+		int id = 1
+		println("Trying to find instructor with ID of $id")
+		Instructor instructor = appDao.findInstructorById(id)
+		println("Found $instructor")
+
+		if (instructor != null) {
+			List<Course> courses = appDao.findCoursesByInstructor(instructor.id)
+			println('The instructor has the following courses:')
+			for (Course course in courses) {
+				println(course)
+			}
+		}
+		/*if (instructor != null) {
+			List<Course> courses = instructor.getCourses()
+			println('The instructor has the following courses:')
+			for (Course course in courses) {
+				println(course)
+			}
+		}*/
+	}
+
+	static void findInstructorWithJoinFetch(IAppDao appDao) {
+		int instructorId = 1
+		println("Trying to find instructor with ID of $instructorId")
+		Instructor instructor = appDao.findInstructorByIdJoinFetch(instructorId)
+		println("Found $instructor")
+		if (instructor != null) {
+			List<Course> courses = appDao.findCoursesByInstructor(instructor.id)
+			println('The instructor has the following courses:')
+			for (Course course in courses) {
+				println(course)
+			}
+		}
+	}
+
+	static void updateInstructor(IAppDao appDao) {
+		int instructorId = 1
+		Instructor instructor = appDao.findInstructorById(instructorId)
+		instructor.lastName = 'TEST VAL'
+		appDao.update(instructor)
+	}
+
+	static void updateCourse(IAppDao appDao) {
+		int courseId = 1
+		Course course = appDao.findCourseById(courseId)
+		if (course != null) {
+			println("Found course: $course")
+			course.title = 'Hiking'
+			appDao.update(course)
+		}
 	}
 }

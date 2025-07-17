@@ -1,9 +1,11 @@
 package com.example.demo.dao
 
+import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
 import groovy.transform.CompileStatic
 import jakarta.persistence.EntityManager
+import jakarta.persistence.TypedQuery
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -32,11 +34,58 @@ class AppDao implements IAppDao {
     @Override
     @Transactional
     void deleteInstructor(int id) {
-        entityManager.remove(findInstructorById(id))
+        Instructor instructor = findInstructorById(id)
+        List<Course> courses = instructor.getCourses()
+        for (def course in courses) {
+            course.instructor = null
+        }
+        entityManager.remove(instructor)
     }
 
     @Override
     InstructorDetail findDetailById(int id) {
         entityManager.find(InstructorDetail.class, id)
+    }
+
+    @Override
+    List<Course> findCoursesByInstructor(int instructorId) {
+        TypedQuery<Course> query = entityManager.createQuery(
+                'from Course where instructor.id = :data',
+                Course.class
+        ).setParameter('data', instructorId)
+        query.getResultList()
+    }
+
+    @Override
+    Instructor findInstructorByIdJoinFetch(int instructorId) {
+        TypedQuery<Instructor> query = entityManager.createQuery(
+                'select i from Instructor i JOIN FETCH i.courses where i.id = :data',
+                Instructor.class
+        ).setParameter('data', instructorId)
+        query.getSingleResult()
+    }
+
+    @Override
+    @Transactional
+    void update(Instructor instructor) {
+        entityManager.merge(instructor)
+    }
+
+    @Override
+    @Transactional
+    void update(Course course) {
+        entityManager.merge(course)
+    }
+
+    @Override
+    Course findCourseById(int id) {
+        entityManager.find(Course.class, id)
+    }
+
+    @Override
+    @Transactional
+    void deleteCourseById(int id) {
+        Course course = entityManager.find(Course.class, id)
+        entityManager.remove(course)
     }
 }

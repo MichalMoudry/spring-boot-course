@@ -4,21 +4,23 @@ import groovy.transform.CompileStatic
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = 'instructor', schema = 'hb_01_one_to_one_uni')
+@Table(name = 'instructor', schema = 'hb_03_one_to_many')
 @CompileStatic
 class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = 'id')
-    private int id
+    private long id
 
     @Column(name = 'first_name')
     private String firstName
@@ -32,6 +34,14 @@ class Instructor {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = 'instructor_detail_id')
     private InstructorDetail detail
+
+    @OneToMany(mappedBy = 'instructor', cascade = [
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    ], fetch = FetchType.LAZY)
+    private List<Course> courses
 
     Instructor() { }
 
@@ -69,6 +79,20 @@ class Instructor {
 
     void setDetail(InstructorDetail detail) {
         this.detail = detail
+    }
+
+    List<Course> getCourses() { courses }
+
+    void setCourses(List<Course> courses) {
+        this.courses = courses
+    }
+
+    void add(Course course) {
+        if (courses == null) {
+            courses = []
+        }
+        courses.add(course)
+        course.setInstructor(this)
     }
 
     @Override
