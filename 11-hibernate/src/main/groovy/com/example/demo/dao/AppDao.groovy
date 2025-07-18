@@ -88,4 +88,10 @@ class AppDao implements IAppDao {
         Course course = entityManager.find(Course.class, id)
         entityManager.remove(course)
     }
+
+    @Override
+    @Transactional
+    void save(Course course) {
+        entityManager.persist(course)
+    }
 }

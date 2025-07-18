@@ -4,6 +4,7 @@ import com.example.demo.dao.IAppDao
 import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
+import com.example.demo.entity.Review
 import groovy.transform.CompileStatic
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -30,6 +31,8 @@ class DemoApplication {
 			findInstructorWithJoinFetch(appDao)*/
 
 			// updateCourse(appDao)
+
+			addCourseAndReviews(appDao)
 		} }
 	}
 
@@ -141,5 +144,19 @@ class DemoApplication {
 			course.title = 'Hiking'
 			appDao.update(course)
 		}
+	}
+
+	static void deleteCourse(IAppDao appDao) {
+		int courseId = 2
+		appDao.deleteCourseById(courseId)
+	}
+
+	static void addCourseAndReviews(IAppDao appDao) {
+		Course course = new Course('Pacman')
+		course.addReview(new Review('Test review 1'))
+		course.addReview(new Review('Test review 2'))
+		course.addReview(new Review('Test review 3'))
+
+		appDao.save(course)
 	}
 }
