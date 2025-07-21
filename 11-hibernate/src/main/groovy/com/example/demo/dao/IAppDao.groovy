@@ -28,4 +28,6 @@ interface IAppDao {
     void deleteCourseById(int id)
 
     void save(Course course)
+
+    Course findCourseWithReviews(int courseId)
 }

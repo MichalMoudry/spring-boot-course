@@ -94,4 +94,14 @@ class AppDao implements IAppDao {
     void save(Course course) {
         entityManager.persist(course)
     }
+
+    @Override
+    Course findCourseWithReviews(int courseId) {
+        TypedQuery<Course> query = entityManager.createQuery(
+                'select c from Course c JOIN FETCH c.reviews where c.id = :data',
+                Course.class
+        ).setParameter('data', courseId)
+
+        query.getSingleResult()
+    }
 }

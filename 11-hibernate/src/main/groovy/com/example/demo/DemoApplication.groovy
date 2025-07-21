@@ -32,7 +32,9 @@ class DemoApplication {
 
 			// updateCourse(appDao)
 
-			addCourseAndReviews(appDao)
+			// addCourseAndReviews(appDao)
+
+			findCourseAndReviews(appDao)
 		} }
 	}
 
@@ -154,9 +156,25 @@ class DemoApplication {
 	static void addCourseAndReviews(IAppDao appDao) {
 		Course course = new Course('Pacman')
 		course.addReview(new Review('Test review 1'))
-		course.addReview(new Review('Test review 2'))
-		course.addReview(new Review('Test review 3'))
+		course.addReview(
+				new Review('Test review 2'),
+				new Review('Test review 3')
+		)
 
+		println('Saving the course')
 		appDao.save(course)
+	}
+
+	static void findCourseAndReviews(IAppDao appDao) {
+		int id = 4
+		println("Trying to find a course with an ID of $id")
+
+		Course course = appDao.findCourseWithReviews(id)
+		if (course != null) {
+			println("Found $course with the following reviews:")
+			for (Review review in course.reviews) {
+				println("\t- $review")
+			}
+		}
 	}
 }
