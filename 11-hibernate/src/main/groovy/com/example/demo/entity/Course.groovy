@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
@@ -37,6 +39,20 @@ class Course {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = 'course_id', nullable = false)
     private List<Review> reviews
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    ])
+    @JoinTable(
+            name = 'course_student',
+            schema = 'hb_03_one_to_many',
+            joinColumns = @JoinColumn(name = 'course_id'),
+            inverseJoinColumns = @JoinColumn(name = 'student_id')
+    )
+    private List<Student> students
 
     Course() { }
 
@@ -76,6 +92,14 @@ class Course {
         this.reviews = reviews
     }
 
+    List<Student> getStudents() {
+        return students
+    }
+
+    void setStudents(List<Student> students) {
+        this.students = students
+    }
+
     void addReview(Review review) {
         if (reviews == null) {
             reviews = []
@@ -88,6 +112,20 @@ class Course {
             reviews = []
         }
         reviews.addAll(newReviews)
+    }
+
+    void addStudent(Student student) {
+        if (students == null) {
+            students = []
+        }
+        students.add(student)
+    }
+
+    void addStudent(Student... newStudents) {
+        if (students == null) {
+            students = []
+        }
+        students.addAll(newStudents)
     }
 
     @Override

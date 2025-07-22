@@ -5,6 +5,7 @@ import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
 import com.example.demo.entity.Review
+import com.example.demo.entity.Student
 import groovy.transform.CompileStatic
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -26,15 +27,20 @@ class DemoApplication {
 			// createInstructorWithCourses(appDao)
 			// findInstructorWithCourses(appDao)
 
-			/*findInstructorWithJoinFetch(appDao)
+			/* findInstructorWithJoinFetch(appDao)
 			updateInstructor(appDao)
-			findInstructorWithJoinFetch(appDao)*/
+			findInstructorWithJoinFetch(appDao) */
 
 			// updateCourse(appDao)
 
 			// addCourseAndReviews(appDao)
 
-			findCourseAndReviews(appDao)
+			// findCourseAndReviews(appDao)
+
+			// createCourseAndStudents(appDao)
+
+			findCourseWithStudents(appDao)
+			findStudentAndCourses(appDao)
 		} }
 	}
 
@@ -175,6 +181,40 @@ class DemoApplication {
 			for (Review review in course.reviews) {
 				println("\t- $review")
 			}
+		}
+	}
+
+	static void createCourseAndStudents(IAppDao appDao) {
+		Course course = new Course('Pacman 2')
+		course.addStudent(
+				new Student('John', 'Doe', 'test@email.com'),
+				new Student('Martin', 'Doe', 'test@email.com')
+		)
+		println("Saving $course with the following students:")
+		println(course.students)
+
+		appDao.save(course)
+	}
+
+	static void findCourseWithStudents(IAppDao appDao) {
+		int courseId = 6
+		println("Trying to find course with an ID of $courseId")
+		Course course = appDao.findCourseAndStudents(courseId)
+		if (course != null) {
+			println("Found $course with the following students:")
+			for (Student student in course.students) {
+				println("\t- $student")
+			}
+		}
+	}
+
+	static void findStudentAndCourses(IAppDao appDao) {
+		int studentId = 3
+		println("Trying to find a student with an ID of $studentId")
+		Student student = appDao.findStudent(studentId)
+		println("Found $student with the following courses:")
+		for (Course course in student.courses) {
+			println("\t- $course")
 		}
 	}
 }

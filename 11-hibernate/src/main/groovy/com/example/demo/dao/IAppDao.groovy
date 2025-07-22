@@ -3,6 +3,7 @@ package com.example.demo.dao
 import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
+import com.example.demo.entity.Student
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -30,4 +31,8 @@ interface IAppDao {
     void save(Course course)
 
     Course findCourseWithReviews(int courseId)
+
+    Course findCourseAndStudents(int courseId)
+
+    Student findStudent(int studentId)
 }

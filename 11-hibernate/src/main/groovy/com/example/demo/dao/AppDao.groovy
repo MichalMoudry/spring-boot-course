@@ -3,6 +3,7 @@ package com.example.demo.dao
 import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
+import com.example.demo.entity.Student
 import groovy.transform.CompileStatic
 import jakarta.persistence.EntityManager
 import jakarta.persistence.TypedQuery
@@ -102,6 +103,24 @@ class AppDao implements IAppDao {
                 Course.class
         ).setParameter('data', courseId)
 
+        query.getSingleResult()
+    }
+
+    @Override
+    Course findCourseAndStudents(int courseId) {
+        TypedQuery<Course> query = entityManager.createQuery(
+                'select c from Course c JOIN FETCH c.students where c.id = :data',
+                Course.class
+        ).setParameter('data', courseId)
+        query.getSingleResult()
+    }
+
+    @Override
+    Student findStudent(int studentId) {
+        TypedQuery<Student> query = entityManager.createQuery(
+                'select s from Student s JOIN FETCH s.courses where s.id = :data ',
+                Student.class
+        ).setParameter('data', studentId)
         query.getSingleResult()
     }
 }
