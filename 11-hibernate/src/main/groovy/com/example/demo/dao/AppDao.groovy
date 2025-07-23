@@ -4,6 +4,7 @@ import com.example.demo.entity.Course
 import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
 import com.example.demo.entity.Student
+import com.example.demo.model.CourseInfo
 import groovy.transform.CompileStatic
 import jakarta.persistence.EntityManager
 import jakarta.persistence.TypedQuery
@@ -122,5 +123,33 @@ class AppDao implements IAppDao {
                 Student.class
         ).setParameter('data', studentId)
         query.getSingleResult()
+    }
+
+    @Override
+    @Transactional
+    void update(Student student) {
+        entityManager.merge(student)
+    }
+
+    @Override
+    CourseInfo getCourseInfo(int courseId) {
+        TypedQuery<CourseInfo> query = entityManager.createQuery(
+                "select new com.example.demo.model.CourseInfo(c.title, \'\', 1) from Course c where c.id = :id",
+                CourseInfo.class
+        ).setParameter('id', courseId)
+        query.getSingleResult()
+    }
+
+    @Override
+    @Transactional
+    void deleteStudent(int studentId) {
+        Student student = entityManager.find(Student.class, studentId)
+        if (student != null) {
+            List<Course> courses = student.courses
+            for (Course course in courses) {
+                course.students.remove(student)
+            }
+            entityManager.remove(student)
+        }
     }
 }

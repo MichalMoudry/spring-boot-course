@@ -6,6 +6,7 @@ import com.example.demo.entity.Instructor
 import com.example.demo.entity.InstructorDetail
 import com.example.demo.entity.Review
 import com.example.demo.entity.Student
+import com.example.demo.model.CourseInfo
 import groovy.transform.CompileStatic
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -39,8 +40,13 @@ class DemoApplication {
 
 			// createCourseAndStudents(appDao)
 
-			findCourseWithStudents(appDao)
-			findStudentAndCourses(appDao)
+			// findCourseWithStudents(appDao)
+
+			// findStudentAndCourses(appDao)
+
+			// addMoreCoursesToStudent(appDao)
+
+			// getCourseInfo(appDao)
 		} }
 	}
 
@@ -216,5 +222,25 @@ class DemoApplication {
 		for (Course course in student.courses) {
 			println("\t- $course")
 		}
+	}
+
+	static void addMoreCoursesToStudent(IAppDao appDao) {
+		int studentId = 3
+		findStudentAndCourses(appDao)
+
+		Student student = appDao.findStudent(studentId)
+		student.addCourse(
+				new Course('Rubik\'s cube'),
+				new Course('Atari 2600')
+		)
+		appDao.update(student)
+
+		findStudentAndCourses(appDao)
+	}
+
+	static void getCourseInfo(IAppDao appDao) {
+		int courseId = 6
+		def info = appDao.getCourseInfo(courseId)
+		println(info)
 	}
 }
