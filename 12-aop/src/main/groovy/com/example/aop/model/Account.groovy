@@ -7,6 +7,13 @@ final class Account {
     private String name
     private String level
 
+    Account() { }
+
+    Account(String name, String level) {
+        this.name = name
+        this.level = level
+    }
+
     String getName() {
         name
     }

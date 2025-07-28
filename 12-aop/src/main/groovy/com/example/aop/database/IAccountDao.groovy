@@ -6,4 +6,6 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface IAccountDao {
     void addAccount(Account account)
+
+    List<Account> findAccounts()
 }

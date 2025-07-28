@@ -11,4 +11,13 @@ class AccountDao implements IAccountDao {
     void addAccount(Account account) {
         println("${getClass()}: adding an account $account")
     }
+
+    @Override
+    List<Account> findAccounts() {
+        [
+                new Account('John', 'Silver'),
+                new Account('Madhu', 'Plat'),
+                new Account('Luca', 'Gold')
+        ]
+    }
 }

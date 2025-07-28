@@ -3,6 +3,7 @@ package com.example.aop
 import com.example.aop.database.IAccountDao
 import com.example.aop.database.IMembershipDao
 import com.example.aop.model.Account
+import com.example.aop.service.ITrafficFortuneService
 import groovy.transform.CompileStatic
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -20,9 +21,13 @@ class AopApplication {
 	@Bean
 	static CommandLineRunner commandLineRunner(
 			IAccountDao accountDao,
-			IMembershipDao membershipDao) {
+			IMembershipDao membershipDao,
+			ITrafficFortuneService trafficFortuneService
+	) {
 		return { runner -> {
-			beforeAdvice(accountDao, membershipDao)
+			// beforeAdvice(accountDao, membershipDao)
+			// afterReturningAdvice(accountDao)
+			runTrafficFortuneService(trafficFortuneService)
 		} }
 	}
 
@@ -34,5 +39,17 @@ class AopApplication {
 		account.name = 'level'
 		accountDao.addAccount(account)
 		membershipDao.addMembership()
+	}
+
+	static void afterReturningAdvice(IAccountDao accountDao) {
+		List<Account> accounts = accountDao.findAccounts()
+		for (Account account in accounts) {
+			println("Account: $account")
+		}
+	}
+
+	static void runTrafficFortuneService(ITrafficFortuneService service) {
+		// println('Calling getFortune()')
+		println("Fortune: ${service.fortune}")
 	}
 }
