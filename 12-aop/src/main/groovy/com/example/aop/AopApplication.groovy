@@ -27,7 +27,8 @@ class AopApplication {
 		return { runner -> {
 			// beforeAdvice(accountDao, membershipDao)
 			// afterReturningAdvice(accountDao)
-			runTrafficFortuneService(trafficFortuneService)
+			// runTrafficFortuneService(trafficFortuneService)
+			runAroundWithException(trafficFortuneService)
 		} }
 	}
 
@@ -51,5 +52,9 @@ class AopApplication {
 	static void runTrafficFortuneService(ITrafficFortuneService service) {
 		// println('Calling getFortune()')
 		println("Fortune: ${service.fortune}")
+	}
+
+	static void runAroundWithException(ITrafficFortuneService service) {
+		println("Fortune: ${service.fortuneWithErr}")
 	}
 }

@@ -5,4 +5,5 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface ITrafficFortuneService {
     String getFortune()
+    String getFortuneWithErr()
 }

@@ -17,4 +17,9 @@ class TrafficFortuneService implements ITrafficFortuneService {
         }
         'Expect heavy traffic this morning'
     }
+
+    @Override
+    String getFortuneWithErr() {
+        throw new RuntimeException('Major accident')
+    }
 }

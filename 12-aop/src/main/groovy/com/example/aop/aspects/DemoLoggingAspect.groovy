@@ -52,4 +52,23 @@ class DemoLoggingAspect {
 
         result
     }
+
+    @Around('execution(* com.example.aop.service.*.getFortuneWithErr(..))')
+    static Object aroundGetFortuneWithErr(ProceedingJoinPoint joinPoint) {
+        String methodSig = joinPoint.getSignature().toShortString()
+        println("| Method: $methodSig")
+
+        Instant start = Instant.now()
+        def result
+        try {
+            result = joinPoint.proceed()
+        } catch (Exception e) {
+            println("| Err: ${e.getMessage()}")
+            result = 'Major accident occurred'
+        }
+        Duration duration = Duration.between(start, Instant.now())
+        println("| Duration: ${duration.toMillis() / 1000}s")
+
+        result
+    }
 }
