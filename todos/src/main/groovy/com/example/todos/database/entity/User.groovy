@@ -1,12 +1,20 @@
 package com.example.todos.database.entity
 
 import groovy.transform.CompileStatic
+import jakarta.persistence.CascadeType
+import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
@@ -33,27 +41,38 @@ class User implements UserDetails {
     @Column(name = 'password', nullable = false)
     private String password
 
+    @CreationTimestamp
     @Column(name = 'created_at', nullable = false)
     private OffsetDateTime createdAt
 
+    @UpdateTimestamp
     @Column(name = 'updated_at', nullable = false)
     private OffsetDateTime updatedAt
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = 'user_authorities',
+            joinColumns = @JoinColumn(name = 'user_id'))
+    private List<Authority> authorities
+
+    @OneToMany(mappedBy = 'owner', cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Todo> todos
 
     User() { }
 
     User(String firstName, String lastName, String email, String password) {
-        OffsetDateTime now = OffsetDateTime.now()
+        // OffsetDateTime now = OffsetDateTime.now()
         this.firstName = firstName
         this.lastName = lastName
         this.email = email
         this.password = password
-        this.createdAt = now
-        this.updatedAt = now
     }
 
     @Override
-    Collection<? extends GrantedAuthority> getAuthorities() {
-        return null
+    Collection<? extends GrantedAuthority> getAuthorities() { authorities }
+
+    void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities
     }
 
     @Override
