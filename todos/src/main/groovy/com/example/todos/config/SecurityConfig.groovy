@@ -62,21 +62,19 @@ class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests {config ->
             config.requestMatchers(
+                    '/api/auth/**',
                     '/swagger-ui/**',
                     '/v3/api-docs/**',
                     '/swagger-resources/**',
                     '/webjars/**',
                     '/docs/**'
-            ).permitAll()
+            ).permitAll().anyRequest().authenticated()
         }
 
         http.csrf {csrf -> csrf.disable()}
-        // TODO: fix
-        /*http.exceptionHandling {
-            errHandling -> errHandling.authenticationEntryPoint {
-                authEntryPoint()
-            }
-        }*/
+        http.exceptionHandling {
+            errHandling -> errHandling.authenticationEntryPoint(authEntryPoint())
+        }
         http.sessionManagement {
             session -> session.sessionCreationPolicy(
                     SessionCreationPolicy.STATELESS

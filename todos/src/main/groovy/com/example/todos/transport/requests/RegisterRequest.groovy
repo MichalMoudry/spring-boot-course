@@ -29,6 +29,8 @@ final class RegisterRequest {
     @JsonProperty('password')
     String password
 
+    RegisterRequest() { }
+
     RegisterRequest(String firstName, String lastName, String email, String password) {
         this.firstName = firstName
         this.lastName = lastName
