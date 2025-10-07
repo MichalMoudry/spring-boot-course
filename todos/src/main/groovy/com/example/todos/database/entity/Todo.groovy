@@ -38,11 +38,12 @@ class Todo {
 
     Todo() { }
 
-    Todo(String title, String description, int priority, boolean isComplete) {
+    Todo(String title, String description, int priority, boolean isComplete, User user) {
         this.title = title
         this.description = description
         this.priority = priority
         this.isComplete = isComplete
+        this.owner = user
     }
 
     long getId() { id }
